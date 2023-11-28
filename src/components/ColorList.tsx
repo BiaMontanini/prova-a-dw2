@@ -2,6 +2,7 @@
 import React from 'react';
 import { useColor } from '../contexts/Contexto';
 import styled from 'styled-components';
+import colorService from '../services/Color';
 
 interface ColorItemProps {
   backgroundColor: string;
@@ -17,7 +18,6 @@ const ColorItem = styled.li<ColorItemProps>`
   justify-content: center;
   width: 100%;
   padding: 10px;
-  margin-bottom: 5px;
   background-color: ${(props) => props.backgroundColor};
 `;
 
@@ -56,16 +56,33 @@ function inverseColor(hexColor: string) {
 }
 
 const ColorList: React.FC = () => {
-  const { colorList } = useColor();
+  const { colorList, setColorList } = useColor();
+
+  const handleDeleteColor = async (id: number) => {
+    try {
+      // Remove a cor do backend
+      await colorService.remove(id);
+
+      // Atualiza o estado do contexto para refletir a remoção
+      const updatedColorList = colorList.filter((color) => color.id !== id);
+      setColorList(updatedColorList);
+
+      // Recarrega a página
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao deletar a cor:', error);
+    }
+  };
 
   return (
     <ColorListContainer>
-      <ul>
+      <div>
         {colorList.map((color) => (
           <ColorItem
-            key={color.id}
-            backgroundColor={`#${color.red.toString(16).padStart(2, '0')}${color.green.toString(16).padStart(2, '0')}${color.blue.toString(16).padStart(2, '0')}`}
-          >
+          key={color.id}
+          backgroundColor={`#${color.red.toString(16).padStart(2, '0')}${color.green.toString(16).padStart(2, '0')}${color.blue.toString(16).padStart(2, '0')}`}
+          onClick={() => color.id && handleDeleteColor(color.id)}
+        >
             <ColorCode
               backgroundColor={`#${color.red.toString(16).padStart(2, '0')}${color.green.toString(16).padStart(2, '0')}${color.blue.toString(16).padStart(2, '0')}`}
             >
@@ -73,7 +90,7 @@ const ColorList: React.FC = () => {
             </ColorCode>
           </ColorItem>
         ))}
-      </ul>
+      </div>
     </ColorListContainer>
   );
 };

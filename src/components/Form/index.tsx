@@ -6,7 +6,6 @@ import {
   StyledColorPickerContainer,
   StyledInput,
   StyledButton,
-  StyledInputsAndButtonContainer,
 } from './styles';
 
 const ColorPicker: React.FC = () => {
@@ -38,17 +37,15 @@ const ColorPicker: React.FC = () => {
 
   return (
     <StyledColorPickerContainer>
-      <StyledInputsAndButtonContainer>
-        <StyledInput type="number" value={color.red} onChange={handleRedChange} />
+      <StyledInput type="number" value={color.red} onChange={handleRedChange} />
 
-        <StyledInput
-          type="number"
-          value={color.green}
-          onChange={handleGreenChange}
-        />
+      <StyledInput
+        type="number"
+        value={color.green}
+        onChange={handleGreenChange}
+      />
 
-        <StyledInput type="number" value={color.blue} onChange={handleBlueChange} />
-      </StyledInputsAndButtonContainer>
+      <StyledInput type="number" value={color.blue} onChange={handleBlueChange} />
 
       <StyledButton onClick={handleCadastro}>Cadastrar</StyledButton>
     </StyledColorPickerContainer>
